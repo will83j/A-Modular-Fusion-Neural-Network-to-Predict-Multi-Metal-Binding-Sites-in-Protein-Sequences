@@ -143,12 +143,6 @@ Example return shape:
 
 The dataset split and cross-validation use `random_state=42`. TensorFlow model training can still vary across environments unless TensorFlow, CUDA, cuDNN, hardware, and random seeds are fully controlled.
 
-## Limitations
-
-- The dataset file `metal_new.csv` is not included in this repository.
-- The current code is configured for `Zn`, `Fe`, and `Mg` only.
-- Sequences longer than `MAX_LEN` are truncated.
-- The script trains models and runs evaluation in one process; for larger datasets, consider separating training, evaluation, and inference into dedicated modules.
 
 ## License
 
