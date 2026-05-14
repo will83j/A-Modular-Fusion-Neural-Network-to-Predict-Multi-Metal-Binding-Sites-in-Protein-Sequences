@@ -70,6 +70,27 @@ Important notes:
 - The `site` and `metal` lists must have matching order and length.
 - The default code only labels `Zn`, `Fe`, and `Mg`; other metals are ignored unless `metal_types` is updated.
 
+A demo file of 'metal_new.csv' is provided above in the repository root.
+Two views of metal counts are reported. The **raw** view counts every annotated site; the **truncated** view reflects what the training pipeline actually sees, since `main.py` truncates/pads every sequence to 500 aa and discards sites at positions beyond 500.
+
+**Raw (all annotated sites):**
+
+| Metal | Binding proteins | Binding residues |
+|-------|-----------------:|-----------------:|
+| Zn    | 30,430           | 136,561          |
+| Fe    | 28,227           | 104,243          |
+| Mg    | 35,478           |  96,083          |
+
+**As seen by training pipeline (sites at position ≤ 500):**
+
+| Metal | Binding proteins | Binding residues |
+|-------|-----------------:|-----------------:|
+| Zn    | 27,314           | 115,147          |
+| Fe    | 26,554           |  98,733          |
+| Mg    | 32,921           |  87,290          |
+
+> **Note.** The figures reported in Table 1 of the published paper (Zn 29,424 / 115,748; Fe 26,793 / 88,795; Mg 35,374 / 81,755) were computed from an earlier statistics pass and may differ slightly from the numbers above due to differences in the MbPA snapshot and intermediate filtering.
+
 ## Usage
 
 Run the complete training and evaluation pipeline:
