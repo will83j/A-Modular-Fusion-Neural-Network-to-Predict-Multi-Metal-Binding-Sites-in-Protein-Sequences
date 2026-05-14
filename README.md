@@ -52,7 +52,7 @@ For GPU acceleration, install a TensorFlow build compatible with your CUDA/cuDNN
 
 ## Dataset
 
-Before running the script, place a CSV file named `metal_new.csv` in the repository root. The one used during training can be found above.
+Before running the script, place a CSV file named `metal_new.csv` in the repository root.
 
 The file must contain these columns:
 
