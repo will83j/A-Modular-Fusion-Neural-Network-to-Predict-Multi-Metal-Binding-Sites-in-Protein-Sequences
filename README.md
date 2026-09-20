@@ -28,9 +28,17 @@ The training pipeline in `main.py` performs the following steps:
 
 ```text
 .
-+-- main.py       # Training, evaluation, model saving, and example prediction
-+-- README.md     # Project documentation
-+-- LICENSE       # MIT License
++-- main.py           # Training, evaluation, model saving, and example prediction
++-- metal_new.csv     # Protein sequences and binding-site annotations
++-- models/           # Place the downloaded model files here
+|   +-- best_metal_model_Zn.h5
+|   +-- best_metal_model_Fe.h5
+|   +-- best_metal_model_Mg.h5
+|   +-- best_fusion_model.h5
+|   +-- tokenizer.pkl
+|   +-- SHA256SUMS.txt
++-- README.md         # Project documentation
++-- LICENSE           # MIT License
 ```
 
 ## Requirements
@@ -48,7 +56,7 @@ Install the dependencies with:
 pip install tensorflow pandas numpy scikit-learn
 ```
 
-For GPU acceleration, install a TensorFlow build compatible with your CUDA/cuDNN environment.
+For GPU acceleration, install a TensorFlow build compatible with your CUDA/cuDNN environment. For loading the pretrained models, use a TensorFlow/Keras environment compatible with the training environment.
 
 ## Dataset
 
@@ -111,17 +119,49 @@ The script will print:
 
 ## Generated Files
 
-After a successful run, the script writes the following files:
+After a successful run, the script writes the following files to its working directory:
 
-```text
-tokenizer.pkl
-best_metal_model_Zn.h5
-best_metal_model_Fe.h5
-best_metal_model_Mg.h5
-best_fusion_model.h5
+| File | Description |
+| --- | --- |
+| `best_metal_model_Zn.h5` | Trained zinc-binding CNN |
+| `best_metal_model_Fe.h5` | Trained iron-binding CNN |
+| `best_metal_model_Mg.h5` | Trained magnesium-binding CNN |
+| `best_fusion_model.h5` | Trained fusion network |
+| `tokenizer.pkl` | Fitted amino-acid tokenizer |
+
+The four model files are saved from the fold with the highest validation macro F1 score. Keep all five files together so that the tokenizer and model weights remain matched.
+
+## Pretrained Models
+
+For prediction with saved models, place all five files listed above in a `models/` directory in the repository root. No training dataset is needed for this inference workflow.
+
+Load the saved models with `compile=False`, which avoids requiring the custom training loss when performing inference:
+
+```python
+from pathlib import Path
+import pickle
+from tensorflow.keras.models import load_model
+
+model_dir = Path("models")
+metal_types = ["Zn", "Fe", "Mg"]
+
+with (model_dir / "tokenizer.pkl").open("rb") as handle:
+    tokenizer = pickle.load(handle)
+
+metal_models = {
+    metal: load_model(
+        model_dir / f"best_metal_model_{metal}.h5",
+        compile=False,
+    )
+    for metal in metal_types
+}
+fusion_model = load_model(
+    model_dir / "best_fusion_model.h5",
+    compile=False,
+)
 ```
 
-These files are generated artifacts and are not required in the source repository unless you want to distribute a trained model.
+The saved models form a single-fold prediction pipeline. Pass the three CNN probability maps to the fusion network in the order **Zn, Fe, Mg**. Use the supplied tokenizer with post-padding and post-truncation to 500 residues.
 
 ## Model Configuration
 
