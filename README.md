@@ -36,7 +36,6 @@ The training pipeline in `main.py` performs the following steps:
 |   +-- best_metal_model_Mg.h5
 |   +-- best_fusion_model.h5
 |   +-- tokenizer.pkl
-|   +-- SHA256SUMS.txt
 +-- README.md         
 +-- LICENSE          
 ```
