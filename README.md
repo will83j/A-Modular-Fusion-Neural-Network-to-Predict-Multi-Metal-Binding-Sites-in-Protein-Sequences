@@ -28,17 +28,17 @@ The training pipeline in `main.py` performs the following steps:
 
 ```text
 .
-+-- main.py           # Training, evaluation, model saving, and example prediction
-+-- metal_new.csv     # Protein sequences and binding-site annotations
-+-- models/           # Place the downloaded model files here
++-- main.py           
++-- metal_new.csv     
++-- models/           
 |   +-- best_metal_model_Zn.h5
 |   +-- best_metal_model_Fe.h5
 |   +-- best_metal_model_Mg.h5
 |   +-- best_fusion_model.h5
 |   +-- tokenizer.pkl
 |   +-- SHA256SUMS.txt
-+-- README.md         # Project documentation
-+-- LICENSE           # MIT License
++-- README.md         
++-- LICENSE          
 ```
 
 ## Requirements
